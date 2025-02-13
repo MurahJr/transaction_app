@@ -1,0 +1,23 @@
+import 'package:flutter/material.dart';
+import 'screens/login_screen.dart';
+import 'screens/transaction_screen.dart';
+import 'screens/add_transaction_screen.dart';
+import 'screens/edit_transaction_screen.dart';
+
+void main() {
+  runApp(TransactionTrackerApp());
+}
+
+class TransactionTrackerApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Transaction Tracker',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: LoginScreen(), // Start with login first
+    );
+  }
+}
