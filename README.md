@@ -27,7 +27,8 @@ Table of Contents
     API Endpoints
     Troubleshooting
 
-    Features
+Features
+
 
 ✅ User authentication (Login, Signup)
 ✅ Add, edit, and delete transactions
@@ -35,6 +36,7 @@ Table of Contents
 ✅ Visual representation of expenses & income
 
 Tech Stack
+
 Frontend (Flutter/Dart)
 
     Flutter (latest stable version)
@@ -42,6 +44,7 @@ Frontend (Flutter/Dart)
     HTTP package for API calls
 
 Backend (Flask/Python)
+
 
     Flask (Micro web framework)
     Flask-RESTful for API structure
@@ -69,6 +72,7 @@ python app.py
 The backend should now be running at: http://127.0.0.1:5000/
 
 Frontend Setup
+
 1️⃣ Go to the frontend directory:
 cd ../frontend
 
@@ -88,6 +92,7 @@ Running the Application
     Frontend: flutter run
 
 API Endpoints
+
 Method	Endpoint	Description
 GET	/transactions	Get all transactions
 POST	/transactions	Add a new transaction
