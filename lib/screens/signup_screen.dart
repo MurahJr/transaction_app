@@ -1,41 +1,34 @@
 import 'package:flutter/material.dart';
-import 'transaction_screen.dart'; // Import transaction screen
-import 'signup_screen.dart';
-import 'package:flutter_animate/flutter_animate.dart'; // Import the animation package
+import 'login_screen.dart';
 
-class LoginScreen extends StatefulWidget {
+class SignUpScreen extends StatefulWidget {
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  _SignUpScreenState createState() => _SignUpScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignUpScreenState extends State<SignUpScreen> {
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  bool _isLoading = false; // Loading indicator
+  bool _isLoading = false;
 
-  void _login() {
+  void _signUp() {
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
 
-      // Simulate a login delay (Replace this with real authentication)
       Future.delayed(Duration(seconds: 2), () {
         setState(() => _isLoading = false);
-
-        if (_emailController.text == "test@email.com" &&
-            _passwordController.text == "password123") {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => TransactionScreen()),
-          );
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content: Text("Invalid email or password"),
-                backgroundColor: Colors.red),
-          );
-        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text("Account Created Successfully!"),
+              backgroundColor: Colors.green),
+        );
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => LoginScreen()));
       });
     }
   }
@@ -47,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
         width: double.infinity,
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.blue.shade900, Colors.blue.shade500],
+            colors: [Colors.purple.shade900, Colors.purple.shade500],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -60,36 +53,33 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.account_balance_wallet_rounded,
-                      size: 80, color: Colors.white),
+                  Icon(Icons.person_add, size: 80, color: Colors.white),
                   SizedBox(height: 20),
-                  Text("Welcome Back!",
+                  Text("Create Account",
                       style: TextStyle(
                           fontSize: 26,
                           fontWeight: FontWeight.bold,
                           color: Colors.white)),
                   SizedBox(height: 30),
+                  _buildTextField(_nameController, Icons.person, "Full Name"),
+                  SizedBox(height: 15),
                   _buildTextField(_emailController, Icons.email, "Email"),
                   SizedBox(height: 15),
                   _buildTextField(_passwordController, Icons.lock, "Password",
                       obscureText: true),
+                  SizedBox(height: 15),
+                  _buildTextField(_confirmPasswordController, Icons.lock,
+                      "Confirm Password",
+                      obscureText: true),
                   SizedBox(height: 20),
                   _isLoading
                       ? CircularProgressIndicator(color: Colors.white)
-                      : _animatedButton("Login", _login),
+                      : _animatedButton("Create Account", _signUp),
                   SizedBox(height: 10),
                   TextButton(
-                      onPressed: () {},
-                      child: Text("Forgot Password?",
-                          style: TextStyle(color: Colors.white, fontSize: 16))),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SignUpScreen()));
-                    },
-                    child: Text("Create New Account",
+                    onPressed: () => Navigator.pushReplacement(context,
+                        MaterialPageRoute(builder: (context) => LoginScreen())),
+                    child: Text("Already have an account? Login",
                         style: TextStyle(color: Colors.white, fontSize: 16)),
                   ),
                 ],
@@ -112,6 +102,8 @@ class _LoginScreenState extends State<LoginScreen> {
         if (value == null || value.isEmpty) return "Please enter $labelText";
         if (labelText == "Email" && !value.contains("@"))
           return "Enter a valid email";
+        if (labelText == "Confirm Password" &&
+            value != _passwordController.text) return "Passwords do not match";
         return null;
       },
       decoration: InputDecoration(
@@ -131,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.white,
-        foregroundColor: Colors.blue.shade900,
+        foregroundColor: Colors.purple.shade900,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
         padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
       ),
