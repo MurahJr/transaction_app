@@ -5,8 +5,7 @@ import 'dart:convert';
 class AddTransactionScreen extends StatefulWidget {
   final Function onTransactionAdded;
 
-  const AddTransactionScreen({Key? key, required this.onTransactionAdded})
-      : super(key: key);
+  const AddTransactionScreen({super.key, required this.onTransactionAdded});
 
   @override
   _AddTransactionScreenState createState() => _AddTransactionScreenState();
@@ -110,8 +109,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       },
                     ),
                     ElevatedButton(
-                      child: const Text("Add"),
                       onPressed: _isLoading ? null : _addTransaction,
+                      child: const Text("Add"),
                     ),
                   ],
                 ),

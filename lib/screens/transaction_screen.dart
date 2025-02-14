@@ -3,6 +3,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class TransactionScreen extends StatefulWidget {
+  const TransactionScreen({super.key});
+
   @override
   _TransactionScreenState createState() => _TransactionScreenState();
 }
@@ -75,29 +77,30 @@ class _TransactionScreenState extends State<TransactionScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text("Add Transaction"),
+          title: const Text("Add Transaction"),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: descriptionController,
-                decoration: InputDecoration(labelText: "Description"),
+                decoration: const InputDecoration(labelText: "Description"),
               ),
               TextField(
                 controller: amountController,
-                decoration: InputDecoration(labelText: "Amount"),
+                decoration: const InputDecoration(labelText: "Amount"),
                 keyboardType: TextInputType.number,
               ),
               TextField(
                 controller: dateController,
-                decoration: InputDecoration(labelText: "Date (YYYY-MM-DD)"),
+                decoration:
+                    const InputDecoration(labelText: "Date (YYYY-MM-DD)"),
               ),
             ],
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text("Cancel"),
+              child: const Text("Cancel"),
             ),
             ElevatedButton(
               onPressed: () {
@@ -110,7 +113,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                   Navigator.pop(context);
                 }
               },
-              child: Text("Add"),
+              child: const Text("Add"),
             ),
           ],
         );
@@ -121,9 +124,9 @@ class _TransactionScreenState extends State<TransactionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Transactions")),
+      appBar: AppBar(title: const Text("Transactions")),
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : ListView.builder(
               itemCount: transactions.length,
               itemBuilder: (context, index) {
@@ -137,7 +140,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
             ),
       floatingActionButton: FloatingActionButton(
         onPressed: _showAddTransactionDialog, // Open the Add Transaction Dialog
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -183,7 +186,8 @@ class TransactionItem extends StatefulWidget {
   final Function(Transaction) onEdit;
   final Function(int) onDelete;
 
-  TransactionItem({
+  const TransactionItem({
+    super.key,
     required this.transaction,
     required this.onEdit,
     required this.onDelete,
@@ -199,7 +203,7 @@ class _TransactionItemState extends State<TransactionItem> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: ExpansionTile(
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -214,11 +218,11 @@ class _TransactionItemState extends State<TransactionItem> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               IconButton(
-                icon: Icon(Icons.edit, color: Colors.blue),
+                icon: const Icon(Icons.edit, color: Colors.blue),
                 onPressed: () => widget.onEdit(widget.transaction),
               ),
               IconButton(
-                icon: Icon(Icons.delete, color: Colors.red),
+                icon: const Icon(Icons.delete, color: Colors.red),
                 onPressed: () => widget.onDelete(widget.transaction.id),
               ),
             ],

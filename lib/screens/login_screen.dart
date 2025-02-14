@@ -89,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => SignUpScreen()));
+                              builder: (context) => const SignUpScreen()));
                     },
                     child: const Text("Create New Account",
                         style: TextStyle(color: Colors.white, fontSize: 16)),

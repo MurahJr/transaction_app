@@ -5,7 +5,7 @@ import 'screens/add_transaction_screen.dart';
 import 'screens/edit_transaction_screen.dart';
 
 void main() {
-  runApp(TransactionTrackerApp());
+  runApp(const TransactionTrackerApp());
 }
 
 class TransactionTrackerApp extends StatelessWidget {
@@ -19,7 +19,7 @@ class TransactionTrackerApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: LoginScreen(), // Start with login first
+      home: const LoginScreen(), // Start with login first
     );
   }
 }

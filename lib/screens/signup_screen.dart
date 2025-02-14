@@ -29,8 +29,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
               content: Text("Account Created Successfully!"),
               backgroundColor: Colors.green),
         );
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => LoginScreen()));
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const LoginScreen()));
       });
     }
   }
@@ -79,8 +79,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       : _animatedButton("Create Account", _signUp),
                   const SizedBox(height: 10),
                   TextButton(
-                    onPressed: () => Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) => LoginScreen())),
+                    onPressed: () => Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const LoginScreen())),
                     child: const Text("Already have an account? Login",
                         style: TextStyle(color: Colors.white, fontSize: 16)),
                   ),
