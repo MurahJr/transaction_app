@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class EditTransactionScreen extends StatefulWidget {
+  const EditTransactionScreen({super.key});
+
   @override
   _EditTransactionScreenState createState() => _EditTransactionScreenState();
 }
@@ -39,24 +41,24 @@ class _EditTransactionScreenState extends State<EditTransactionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Edit Transaction")),
+      appBar: AppBar(title: const Text("Edit Transaction")),
       body: Padding(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           children: [
             TextField(
               controller: _descriptionController,
-              decoration: InputDecoration(labelText: "Description"),
+              decoration: const InputDecoration(labelText: "Description"),
             ),
             TextField(
               controller: _amountController,
-              decoration: InputDecoration(labelText: "Amount"),
+              decoration: const InputDecoration(labelText: "Amount"),
               keyboardType: TextInputType.number,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _updateTransaction,
-              child: Text("Update Transaction"),
+              child: const Text("Update Transaction"),
             ),
           ],
         ),

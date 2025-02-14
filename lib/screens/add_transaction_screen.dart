@@ -1,52 +1,146 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class AddTransactionScreen extends StatefulWidget {
+  final Function onTransactionAdded;
+
+  const AddTransactionScreen({Key? key, required this.onTransactionAdded})
+      : super(key: key);
+
   @override
   _AddTransactionScreenState createState() => _AddTransactionScreenState();
 }
 
 class _AddTransactionScreenState extends State<AddTransactionScreen> {
-  final _descriptionController = TextEditingController();
-  final _amountController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _amountController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+  bool _isLoading = false;
 
-  void _submitTransaction() {
-    final description = _descriptionController.text;
-    final amount = double.tryParse(_amountController.text);
+  Future<void> _selectDate(BuildContext context) async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
 
-    if (description.isEmpty || amount == null) return;
+    if (pickedDate != null) {
+      setState(() {
+        _dateController.text = pickedDate.toIso8601String().split('T')[0];
+      });
+    }
+  }
 
-    Navigator.pop(context, {
-      'description': description,
-      'amount': amount,
-      'date': DateTime.now().toString().substring(0, 10),
+  Future<void> _addTransaction() async {
+    if (_descriptionController.text.isEmpty ||
+        _amountController.text.isEmpty ||
+        _dateController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please fill in all fields")),
+      );
+      return;
+    }
+
+    double? amount = double.tryParse(_amountController.text);
+    if (amount == null || amount <= 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Enter a valid amount")),
+      );
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    bool success = await ApiService.addTransaction(
+      _descriptionController.text,
+      amount,
+      _dateController.text,
+    );
+
+    if (success) {
+      widget.onTransactionAdded();
+      Navigator.pop(context);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Failed to add transaction")),
+      );
+    }
+
+    setState(() {
+      _isLoading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Add Transaction")),
-      body: Padding(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          children: [
-            TextField(
-              controller: _descriptionController,
-              decoration: InputDecoration(labelText: "Description"),
-            ),
-            TextField(
-              controller: _amountController,
-              decoration: InputDecoration(labelText: "Amount"),
-              keyboardType: TextInputType.number,
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _submitTransaction,
-              child: Text("Add Transaction"),
-            ),
-          ],
-        ),
+    return AlertDialog(
+      title: const Text("Add Transaction"),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextField(
+            controller: _descriptionController,
+            decoration: const InputDecoration(labelText: "Description"),
+          ),
+          TextField(
+            controller: _amountController,
+            decoration: const InputDecoration(labelText: "Amount"),
+            keyboardType: TextInputType.number,
+          ),
+          TextField(
+            controller: _dateController,
+            decoration: const InputDecoration(labelText: "Date"),
+            readOnly: true,
+            onTap: () => _selectDate(context),
+          ),
+          const SizedBox(height: 10),
+          _isLoading
+              ? const CircularProgressIndicator()
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      child: const Text("Cancel"),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    ElevatedButton(
+                      child: const Text("Add"),
+                      onPressed: _isLoading ? null : _addTransaction,
+                    ),
+                  ],
+                ),
+        ],
       ),
     );
+  }
+}
+
+class ApiService {
+  static const String baseUrl = "https://your-api-url.com";
+
+  static Future<bool> addTransaction(
+      String description, double amount, String date) async {
+    try {
+      final response = await http.post(
+        Uri.parse("$baseUrl/transactions"),
+        headers: {"Content-Type": "application/json"},
+        body: json.encode({
+          "description": description,
+          "amount": amount,
+          "date": date,
+        }),
+      );
+
+      return response.statusCode == 201;
+    } catch (e) {
+      print("API Error: $e");
+      return false;
+    }
   }
 }

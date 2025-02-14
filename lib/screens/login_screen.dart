@@ -4,6 +4,8 @@ import 'signup_screen.dart';
 import 'package:flutter_animate/flutter_animate.dart'; // Import the animation package
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -20,7 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() => _isLoading = true);
 
       // Simulate a login delay (Replace this with real authentication)
-      Future.delayed(Duration(seconds: 2), () {
+      Future.delayed(const Duration(seconds: 2), () {
         setState(() => _isLoading = false);
 
         if (_emailController.text == "test@email.com" &&
@@ -31,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
+            const SnackBar(
                 content: Text("Invalid email or password"),
                 backgroundColor: Colors.red),
           );
@@ -60,27 +62,27 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.account_balance_wallet_rounded,
+                  const Icon(Icons.account_balance_wallet_rounded,
                       size: 80, color: Colors.white),
-                  SizedBox(height: 20),
-                  Text("Welcome Back!",
+                  const SizedBox(height: 20),
+                  const Text("Welcome Back!",
                       style: TextStyle(
                           fontSize: 26,
                           fontWeight: FontWeight.bold,
                           color: Colors.white)),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                   _buildTextField(_emailController, Icons.email, "Email"),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   _buildTextField(_passwordController, Icons.lock, "Password",
                       obscureText: true),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   _isLoading
-                      ? CircularProgressIndicator(color: Colors.white)
+                      ? const CircularProgressIndicator(color: Colors.white)
                       : _animatedButton("Login", _login),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   TextButton(
                       onPressed: () {},
-                      child: Text("Forgot Password?",
+                      child: const Text("Forgot Password?",
                           style: TextStyle(color: Colors.white, fontSize: 16))),
                   TextButton(
                     onPressed: () {
@@ -89,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           MaterialPageRoute(
                               builder: (context) => SignUpScreen()));
                     },
-                    child: Text("Create New Account",
+                    child: const Text("Create New Account",
                         style: TextStyle(color: Colors.white, fontSize: 16)),
                   ),
                 ],
@@ -107,11 +109,12 @@ class _LoginScreenState extends State<LoginScreen> {
     return TextFormField(
       controller: controller,
       obscureText: obscureText,
-      style: TextStyle(color: Colors.white),
+      style: const TextStyle(color: Colors.white),
       validator: (value) {
         if (value == null || value.isEmpty) return "Please enter $labelText";
-        if (labelText == "Email" && !value.contains("@"))
+        if (labelText == "Email" && !value.contains("@")) {
           return "Enter a valid email";
+        }
         return null;
       },
       decoration: InputDecoration(
@@ -119,7 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
         fillColor: Colors.white.withOpacity(0.2),
         prefixIcon: Icon(icon, color: Colors.white),
         labelText: labelText,
-        labelStyle: TextStyle(color: Colors.white),
+        labelStyle: const TextStyle(color: Colors.white),
         border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(25),
             borderSide: BorderSide.none),
@@ -133,10 +136,10 @@ class _LoginScreenState extends State<LoginScreen> {
         backgroundColor: Colors.white,
         foregroundColor: Colors.blue.shade900,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-        padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
+        padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 15),
       ),
       onPressed: onPressed,
-      child: Text(text, style: TextStyle(fontSize: 18)),
+      child: Text(text, style: const TextStyle(fontSize: 18)),
     );
   }
 }

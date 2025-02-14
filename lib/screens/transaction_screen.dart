@@ -39,15 +39,16 @@ class _TransactionScreenState extends State<TransactionScreen> {
   }
 
   // Add a new transaction to the Flask API
-  Future<void> addTransaction(Transaction transaction) async {
+  Future<void> addTransaction(
+      String description, double amount, String date) async {
     try {
       final response = await http.post(
         Uri.parse('http://localhost:5000/transactions'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
-          'amount': transaction.amount,
-          'description': transaction.description,
-          'date': transaction.date,
+          'amount': amount,
+          'description': description,
+          'date': date,
         }),
       );
 
@@ -62,6 +63,59 @@ class _TransactionScreenState extends State<TransactionScreen> {
     } catch (e) {
       print('Error adding transaction: $e');
     }
+  }
+
+  // Show a dialog to enter a new transaction
+  void _showAddTransactionDialog() {
+    TextEditingController descriptionController = TextEditingController();
+    TextEditingController amountController = TextEditingController();
+    TextEditingController dateController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Add Transaction"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: descriptionController,
+                decoration: InputDecoration(labelText: "Description"),
+              ),
+              TextField(
+                controller: amountController,
+                decoration: InputDecoration(labelText: "Amount"),
+                keyboardType: TextInputType.number,
+              ),
+              TextField(
+                controller: dateController,
+                decoration: InputDecoration(labelText: "Date (YYYY-MM-DD)"),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text("Cancel"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                String description = descriptionController.text;
+                double amount = double.tryParse(amountController.text) ?? 0.0;
+                String date = dateController.text;
+
+                if (description.isNotEmpty && amount > 0 && date.isNotEmpty) {
+                  addTransaction(description, amount, date);
+                  Navigator.pop(context);
+                }
+              },
+              child: Text("Add"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -82,15 +136,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
               },
             ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final newTransaction = Transaction(
-            id: transactions.length + 1, // Just for ID simulation
-            date: '2025-02-13', // Static date for testing
-            amount: 20.0,
-            description: 'New Transaction',
-          );
-          await addTransaction(newTransaction); // Add transaction
-        },
+        onPressed: _showAddTransactionDialog, // Open the Add Transaction Dialog
         child: Icon(Icons.add),
       ),
     );
@@ -98,13 +144,11 @@ class _TransactionScreenState extends State<TransactionScreen> {
 
   void _editTransaction(Transaction transaction) {
     // Open Edit Transaction screen with the selected transaction
-    // For now, this can just print out the transaction details
     print('Editing: ${transaction.id}');
   }
 
   void _deleteTransaction(int transactionId) {
-    // Handle delete logic here
-    // For now, just removing from the list
+    // Handle delete logic
     setState(() {
       transactions.removeWhere((t) => t.id == transactionId);
     });
@@ -164,17 +208,17 @@ class _TransactionItemState extends State<TransactionItem> {
             Text('\$${widget.transaction.amount.toStringAsFixed(2)}'),
           ],
         ),
-        subtitle: isExpanded ? Text(widget.transaction.description) : null,
+        subtitle: Text(widget.transaction.description),
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               IconButton(
-                icon: Icon(Icons.edit),
+                icon: Icon(Icons.edit, color: Colors.blue),
                 onPressed: () => widget.onEdit(widget.transaction),
               ),
               IconButton(
-                icon: Icon(Icons.delete),
+                icon: Icon(Icons.delete, color: Colors.red),
                 onPressed: () => widget.onDelete(widget.transaction.id),
               ),
             ],

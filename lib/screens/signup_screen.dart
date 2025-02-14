@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'login_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
+
   @override
   _SignUpScreenState createState() => _SignUpScreenState();
 }
@@ -20,10 +22,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (_formKey.currentState!.validate()) {
       setState(() => _isLoading = true);
 
-      Future.delayed(Duration(seconds: 2), () {
+      Future.delayed(const Duration(seconds: 2), () {
         setState(() => _isLoading = false);
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
               content: Text("Account Created Successfully!"),
               backgroundColor: Colors.green),
         );
@@ -53,33 +55,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.person_add, size: 80, color: Colors.white),
-                  SizedBox(height: 20),
-                  Text("Create Account",
+                  const Icon(Icons.person_add, size: 80, color: Colors.white),
+                  const SizedBox(height: 20),
+                  const Text("Create Account",
                       style: TextStyle(
                           fontSize: 26,
                           fontWeight: FontWeight.bold,
                           color: Colors.white)),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                   _buildTextField(_nameController, Icons.person, "Full Name"),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   _buildTextField(_emailController, Icons.email, "Email"),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   _buildTextField(_passwordController, Icons.lock, "Password",
                       obscureText: true),
-                  SizedBox(height: 15),
+                  const SizedBox(height: 15),
                   _buildTextField(_confirmPasswordController, Icons.lock,
                       "Confirm Password",
                       obscureText: true),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   _isLoading
-                      ? CircularProgressIndicator(color: Colors.white)
+                      ? const CircularProgressIndicator(color: Colors.white)
                       : _animatedButton("Create Account", _signUp),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   TextButton(
                     onPressed: () => Navigator.pushReplacement(context,
                         MaterialPageRoute(builder: (context) => LoginScreen())),
-                    child: Text("Already have an account? Login",
+                    child: const Text("Already have an account? Login",
                         style: TextStyle(color: Colors.white, fontSize: 16)),
                   ),
                 ],
@@ -97,11 +99,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return TextFormField(
       controller: controller,
       obscureText: obscureText,
-      style: TextStyle(color: Colors.white),
+      style: const TextStyle(color: Colors.white),
       validator: (value) {
         if (value == null || value.isEmpty) return "Please enter $labelText";
-        if (labelText == "Email" && !value.contains("@"))
+        if (labelText == "Email" && !value.contains("@")) {
           return "Enter a valid email";
+        }
         if (labelText == "Confirm Password" &&
             value != _passwordController.text) return "Passwords do not match";
         return null;
@@ -111,7 +114,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         fillColor: Colors.white.withOpacity(0.2),
         prefixIcon: Icon(icon, color: Colors.white),
         labelText: labelText,
-        labelStyle: TextStyle(color: Colors.white),
+        labelStyle: const TextStyle(color: Colors.white),
         border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(25),
             borderSide: BorderSide.none),
@@ -125,10 +128,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
         backgroundColor: Colors.white,
         foregroundColor: Colors.purple.shade900,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-        padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
+        padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 15),
       ),
       onPressed: onPressed,
-      child: Text(text, style: TextStyle(fontSize: 18)),
+      child: Text(text, style: const TextStyle(fontSize: 18)),
     );
   }
 }

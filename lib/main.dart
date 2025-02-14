@@ -9,6 +9,8 @@ void main() {
 }
 
 class TransactionTrackerApp extends StatelessWidget {
+  const TransactionTrackerApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
